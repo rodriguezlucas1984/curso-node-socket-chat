@@ -96,10 +96,26 @@ txtMensaje.addEventListener("keyup", ({ keyCode }) => {
   txtMensaje.value = "";
 });
 
+btnSalir.addEventListener("click", () => {
+  localStorage.removeItem("token");
+
+  const auth2 = gapi.auth2.getAuthInstance();
+  auth2.signOut().then(() => {
+    console.log("User signed out.");
+    window.location = "index.html";
+  });
+});
+
 const main = async () => {
   //Validar JWT
   await validarJWT();
 };
 
-main();
+(() => {
+  gapi.load("auth2", () => {
+    gapi.auth2.init();
+    main();
+  });
+})();
+//main();
 //const socket = io();
